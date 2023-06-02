@@ -19,7 +19,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Pull base image
-      run: docker pull my-base-image:latest
+      run: docker pull choya/my-base-image:latest
     
     - name: Build and run the Docker Compose configuration
       run: |
