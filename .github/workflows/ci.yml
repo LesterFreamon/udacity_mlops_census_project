@@ -24,13 +24,13 @@ jobs:
         docker-compose up -d
 
     - name: Run flake8
-      run: docker-compose run --rm <service-name> flake8 .
+      run: docker-compose run --rm data_ingest data_processing model_training model_serving mlflow_tracking flake8 .
 
     - name: Run Pyre
-      run: docker-compose run --rm <service-name> pyre check
+      run: docker-compose run --rm data_ingest data_processing model_training model_serving mlflow_tracking pyre check
 
     - name: Run pytest with coverage
-      run: docker-compose run --rm <service-name> pytest --cov=. --cov-fail-under=90
+      run: docker-compose run --rm data_ingest data_processing model_training model_serving mlflow_tracking pytest --cov=. --cov-fail-under=90
 
     - name: Stop and remove containers
       run: docker-compose down
