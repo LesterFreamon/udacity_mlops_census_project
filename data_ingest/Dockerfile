@@ -1,5 +1,5 @@
 # Use the base image from the root directory
-FROM my-base-image:latest
+FROM choya/my-base-image:latest
 
 # Set the working directory in the container to /app
 WORKDIR /app
