@@ -5,9 +5,7 @@ FROM choya/my-base-image:latest
 WORKDIR /app
 
 # Copy the model serving component files
-COPY model_serving/MLproject .
-COPY model_serving/app ./app
-COPY model_serving/requirements.txt .
+COPY . /app
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
