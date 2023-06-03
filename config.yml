@@ -1,0 +1,6 @@
+services:
+  - data_ingest
+  - data_processing
+  - model_training
+  - model_serving
+  - mlflow_tracking
