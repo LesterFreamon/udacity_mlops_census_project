@@ -1,0 +1,4 @@
+[core]
+    remote = gcp_census_remote
+[remote "gcp_census_remote"]
+    url = gs://census_ml_ops_data/census.csv
