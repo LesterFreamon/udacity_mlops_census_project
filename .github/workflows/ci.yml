@@ -22,10 +22,13 @@ jobs:
       run: |
         docker-compose build
         docker-compose up -d
-
+        
     - name: Run flake8
-      run: docker-compose run --rm data_ingest data_processing model_training model_serving mlflow_tracking flake8 .
-
+      run: |
+        for service in ${{ steps.config.outputs.services }}; do
+          docker-compose exec $service flake8 .
+        done
+    
     - name: Run Pyre
       run: docker-compose run --rm data_ingest data_processing model_training model_serving mlflow_tracking pyre check
 
