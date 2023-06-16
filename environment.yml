@@ -1,0 +1,14 @@
+name: my_project
+channels:
+- defaults
+dependencies:
+- python=3.8
+- pandas=1.2.3
+- scikit-learn=0.24.1
+- fastapi=0.63.0
+- pytest=6.2.2
+- flake8=3.8.4
+- pip
+- pip:
+  - dvc[s3]==2.0.18
+  - boto3==1.17.57

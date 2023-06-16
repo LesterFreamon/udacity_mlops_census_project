@@ -1,0 +1,12 @@
+name: census_explore_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - matplotlib=3.4.3
+  - seaborn=0.11.2
+  - jupyterlab=3.1.14
+  - python-dotenv=0.19.1
+  - ydata-profiling=4.2.0
+
+base: census_base_env
