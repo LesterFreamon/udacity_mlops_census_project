@@ -1,13 +1,15 @@
 # Put the code for your API here.
-from fastapi import FastAPI
-from pydantic import BaseModel, Field
 from typing import List
+
+from fastapi import FastAPI
+# pylint: disable=E0611
+from pydantic import BaseModel, Field
 
 app = FastAPI()
 
 
 class InputData(BaseModel):
-    age: List[float] = Field(..., example=31)
+    age: int = Field(..., example=31)
 
 @app.get("/")
 async def root():
