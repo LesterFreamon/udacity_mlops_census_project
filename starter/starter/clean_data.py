@@ -1,11 +1,13 @@
 import pandas as pd
 
+
 def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
     """Cleans the column names"""
     df.columns = df.columns.str.replace(' ', '')  # Delete spaces
     df.columns = df.columns.str.lower()  # Convert to lowercase
     df.columns = df.columns.str.replace('-', '_')  # Replace hyphen with underscore
     return df
+
 
 def clean_string_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Clean the object columns"""
@@ -22,6 +24,7 @@ def clean_string_columns(df: pd.DataFrame) -> pd.DataFrame:
         df[col] = df[col].astype('category')
 
     return df
+
 
 def clean_data(raw_df: pd.DataFrame) -> pd.DataFrame:
     """Cleans orginal file model input data."""

@@ -1,6 +1,4 @@
 # Put the code for your API here.
-from typing import List
-
 from fastapi import FastAPI
 # pylint: disable=E0611
 from pydantic import BaseModel, Field
@@ -11,9 +9,11 @@ app = FastAPI()
 class InputData(BaseModel):
     age: int = Field(..., example=31)
 
+
 @app.get("/")
 async def root():
     return {"message": "Welcome to the model API"}
+
 
 @app.post("/predict")
 async def predict(data: InputData):

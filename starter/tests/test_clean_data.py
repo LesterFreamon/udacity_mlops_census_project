@@ -20,9 +20,9 @@ def test_clean_string_columns():
     })
     cleaned_df = clean_string_columns(raw_df)
     assert cleaned_df['column1'].dtype.name == 'category'
-    assert cleaned_df['column1'].str.contains(' ').any() == False
-    assert cleaned_df['column1'].str.contains('-').any() == False
-    assert cleaned_df['column1'].str.islower().all() == True
+    assert cleaned_df['column1'].str.contains(' ').any() is False
+    assert cleaned_df['column1'].str.contains('-').any() is False
+    assert cleaned_df['column1'].str.islower().all() is True
 
 
 def test_clean_data():
@@ -33,6 +33,6 @@ def test_clean_data():
     cleaned_df = clean_data(raw_df)
     assert 'columnname' in cleaned_df.columns
     assert cleaned_df['column_name'].dtype.name == 'category'
-    assert cleaned_df['column_name'].str.contains(' ').any() == False
-    assert cleaned_df['column_name'].str.contains('-').any() == False
-    assert cleaned_df['column_name'].str.islower().all() == True
+    assert cleaned_df['column_name'].str.contains(' ').any() is False
+    assert cleaned_df['column_name'].str.contains('-').any() is False
+    assert cleaned_df['column_name'].str.islower().all() is True
