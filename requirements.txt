@@ -5,3 +5,5 @@ gunicorn
 dvc==3.0.0
 dvc-s3==2.23.0
 uvicorn
+mypy
+types-requests
