@@ -10,4 +10,4 @@ dependencies:
   - fastapi=0.63.0
   - pip
   - pip:
-    - -r file:requirements.txt
+    - -r file:./requirements.txt
