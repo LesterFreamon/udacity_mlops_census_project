@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from src.clean_data import clean_column_names, clean_string_columns, clean_data
+from ..src.clean_data import clean_column_names, clean_string_columns, clean_data
 
 
 def test_clean_column_names():

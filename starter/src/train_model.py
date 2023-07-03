@@ -5,9 +5,9 @@ import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from src.config import CAT_FEATURES, LABEL
-from src.ml.data import process_data
-from src.ml.model import train_model, inference, compute_model_metrics
+from .config import CAT_FEATURES, LABEL
+from .ml.data import process_data
+from .ml.model import train_model, inference, compute_model_metrics
 
 # Script to train machine learning model.
 

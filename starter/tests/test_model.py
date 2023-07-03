@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 
-from src.ml.model import compute_model_metrics
+from ..src.ml.model import compute_model_metrics
 
 
 def test_compute_model_metrics():
