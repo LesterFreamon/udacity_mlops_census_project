@@ -1,7 +1,7 @@
 import pickle
 
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from .src.config import CAT_FEATURES
@@ -50,6 +50,10 @@ async def root():
 
 @app.post("/predict")
 async def predict(data: InputData):
+
+    if model is None or encoder is None:
+        raise HTTPException(status_code=500, detail="Model or encoder not loaded")
+
     # Prepare the data for model
     data_dict = data.dict(by_alias=True)
 
