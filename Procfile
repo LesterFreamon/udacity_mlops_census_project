@@ -1,1 +1,1 @@
-web: uvicorn starter.main:app --workers 4
+web: uvicorn starter.main:app --host 0.0.0.0 --port ${PORT:-5000}
