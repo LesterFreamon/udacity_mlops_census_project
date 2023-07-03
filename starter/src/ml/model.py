@@ -1,3 +1,5 @@
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 
 
@@ -18,7 +20,19 @@ def train_model(X_train, y_train):
         Trained machine learning model.
     """
 
-    pass
+    model = LogisticRegression(max_iter=1000)
+
+    param_grid = {'C': [0.001, 0.01, 0.1, 1],
+                  'penalty': ['l1'],
+                  'solver': ['liblinear', 'saga']}
+
+    grid = GridSearchCV(model, param_grid, cv=3, scoring='accuracy', verbose=2, n_jobs=8)
+
+    grid.fit(X_train, y_train)
+
+    # return the model with the best hyperparameters
+    best_model = grid.best_estimator_
+    return best_model
 
 
 def compute_model_metrics(y, preds):
@@ -57,4 +71,5 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    pass
+    preds = model.predict(X)
+    return preds

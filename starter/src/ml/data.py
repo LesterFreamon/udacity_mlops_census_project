@@ -14,7 +14,7 @@ def process_data(
     training: bool = True,
     encoder: Optional[OneHotEncoder] = None,
     lb: Optional[LabelBinarizer] = None
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, OneHotEncoder, Optional[LabelBinarizer]]:
     """ Process the data used in the machine learning pipeline.
 
     Processes the data using one hot encoding for the categorical features and a

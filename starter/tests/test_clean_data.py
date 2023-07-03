@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from starter.clean_data import clean_column_names, clean_string_columns, clean_data
+from src.clean_data import clean_column_names, clean_string_columns, clean_data
 
 
 def test_clean_column_names():
@@ -19,10 +19,14 @@ def test_clean_string_columns():
         'column2': np.arange(20)
     })
     cleaned_df = clean_string_columns(raw_df)
+
     assert cleaned_df['column1'].dtype.name == 'category'
-    assert cleaned_df['column1'].str.contains(' ').any() is False
-    assert cleaned_df['column1'].str.contains('-').any() is False
-    assert cleaned_df['column1'].str.islower().all() is True
+    assert cleaned_df['column2'].dtype.name == 'int64'
+    assert cleaned_df['column1'].str.contains(' ').any() is np.bool_(False)
+    assert cleaned_df['column1'].str.contains('-').any() is np.bool_(False)
+    assert cleaned_df['column1'].str.islower().all() is np.bool_(True)
+
+
 
 
 def test_clean_data():
@@ -31,8 +35,9 @@ def test_clean_data():
         'Column-Name': np.arange(20)
     })
     cleaned_df = clean_data(raw_df)
-    assert 'columnname' in cleaned_df.columns
-    assert cleaned_df['column_name'].dtype.name == 'category'
-    assert cleaned_df['column_name'].str.contains(' ').any() is False
-    assert cleaned_df['column_name'].str.contains('-').any() is False
-    assert cleaned_df['column_name'].str.islower().all() is True
+    assert 'column_name' in cleaned_df.columns
+    assert cleaned_df['columnname'].dtype.name == 'category'
+    assert cleaned_df['column_name'].dtype.name == 'int64'
+    assert cleaned_df['columnname'].str.contains(' ').any() is np.bool_(False)
+    assert cleaned_df['columnname'].str.contains('-').any() is np.bool_(False)
+    assert cleaned_df['columnname'].str.islower().all() is np.bool_(True)

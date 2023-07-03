@@ -1,8 +1,7 @@
-numpy
-pandas
-scikit-learn
-pytest
 requests
 fastapi==0.63.0
 uvicorn
 gunicorn
+dvc==3.0.0
+dvc-s3==2.23.0
+uvicorn
