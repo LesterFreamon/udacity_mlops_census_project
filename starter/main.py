@@ -53,7 +53,7 @@ async def predict(data: InputData):
 
     if model is None or encoder is None:
         raise HTTPException(status_code=500, detail="Model or encoder not loaded")
-    
+
     # Prepare the data for model
     data_dict = data.dict(by_alias=True)
 
