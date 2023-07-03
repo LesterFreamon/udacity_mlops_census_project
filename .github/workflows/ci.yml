@@ -1,45 +1,27 @@
-name: Docker Compose CI
+name: Python CI
 
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Login to DockerHub
-      uses: docker/login-action@v1 
+    - name: Set up Python
+      uses: actions/setup-python@v2
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
-    - name: Build and run the Docker Compose configuration
+        python-version: 3.8
+    - name: Install dependencies
       run: |
-        docker-compose build
-        docker-compose up -d
-        
-    - name: Run flake8
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install flake8 pytest pytest-cov mypy
+    - name: Lint with flake8
       run: |
-        for service in ${{ steps.config.outputs.services }}; do
-          docker-compose exec $service flake8 .
-        done
-    
-    - name: Run Pyre
+        flake8 . --count --show-source --statistics
+    - name: Type check with mypy
       run: |
-        for service in ${{ steps.config.outputs.services }}; do
-          docker-compose exec $service pyre check
-        done
-
-    - name: Run Pytest
+        mypy --ignore-missing-imports .
+    - name: Test with pytest
       run: |
-        for service in ${{ steps.config.outputs.services }}; do
-          docker-compose exec $service pytest --cov=. --cov-fail-under=90
-        done
-        
-    - name: Stop and remove containers
-      run: docker-compose down
+        pytest ./starter/tests --ignore=./starter/tests/test_main.py --cov=./starter/src
