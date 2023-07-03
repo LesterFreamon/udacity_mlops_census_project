@@ -27,8 +27,6 @@ def test_clean_string_columns():
     assert cleaned_df['column1'].str.islower().all() is np.bool_(True)
 
 
-
-
 def test_clean_data():
     raw_df = pd.DataFrame({
         ' Column Name ': [' Value ', 'Value-', 'VALUE ', 'vAlUe-'] * 5,

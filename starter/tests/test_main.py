@@ -3,7 +3,6 @@ from fastapi.testclient import TestClient
 from main import app
 
 import json
-import pytest
 import requests
 
 # replace the URL with your application URL

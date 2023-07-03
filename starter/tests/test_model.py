@@ -1,4 +1,3 @@
-import pytest
 import numpy as np
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 
