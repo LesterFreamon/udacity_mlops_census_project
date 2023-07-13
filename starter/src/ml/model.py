@@ -103,13 +103,12 @@ def compute_metrics_per_category(
         slice_indices = test[feature] == value
         test_slice = test[slice_indices]
 
-        X_test, y_true, _, _ = process_data(test_slice, 
-            categorical_features=cat_features, 
-            label=target, training=False, encoder=encoder, lb=lb
+        X_test, y_true, _, _ = process_data(
+            test_slice, categorical_features=cat_features, label=target, training=False, encoder=encoder, lb=lb
             )
 
         y_pred = model.predict(X_test)
-        
+
         # Compute the metrics
         precision, recall, fbeta = compute_model_metrics(y_true, y_pred)
 
