@@ -1,9 +1,7 @@
 """Data processing functions."""
 from typing import List, Optional, Tuple
 
-import numpy as np
 import pandas as pd
-
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 
 
@@ -14,7 +12,7 @@ def process_data(
     training: bool = True,
     encoder: Optional[OneHotEncoder] = None,
     lb: Optional[LabelBinarizer] = None
-) -> Tuple[np.ndarray, np.ndarray, OneHotEncoder, Optional[LabelBinarizer]]:
+) -> Tuple[pd.DataFrame, pd.Series, OneHotEncoder, Optional[LabelBinarizer]]:
     """ Process the data used in the machine learning pipeline.
 
     Processes the data using one hot encoding for the categorical features and a
@@ -54,31 +52,42 @@ def process_data(
         passed in.
     """
 
+    if not training and ((encoder is None) or (lb is None)):
+        raise ValueError("encoder and lb must be provided for inference")
+
     if label is not None:
         y = X[label]
         X = X.drop([label], axis=1)
+        if training is True:
+            lb = LabelBinarizer()
+            y = lb.fit_transform(y.values).ravel()
+            y = pd.Series(y, name=label)
+        elif isinstance(lb, LabelBinarizer):
+            try:
+                y = lb.transform(y.values).ravel()
+                y = pd.Series(y, name=label)
+            # Catch the case where y is None because we're doing inference.
+            except AttributeError:
+                pass
     else:
-        y = np.array([])
+        y = pd.Series()
 
-    X_categorical = X[categorical_features].values
-    X_continuous = X.drop(*[categorical_features], axis=1)
-
-    if training is True:
-        encoder = OneHotEncoder(sparse=False, handle_unknown="ignore")
-        lb = LabelBinarizer()
-        X_categorical = encoder.fit_transform(X_categorical)
-        y = lb.fit_transform(y.values).ravel()
-    elif isinstance(encoder, OneHotEncoder) and isinstance(lb, LabelBinarizer):
-        X_categorical = encoder.transform(X_categorical)
-        try:
-            y = lb.transform(y.values).ravel()
-        # Catch the case where y is None because we're doing inference.
-        except AttributeError:
-            pass
+    if len(categorical_features) > 0:
+        X_categorical = X[categorical_features]
+        if training is True:
+            encoder = OneHotEncoder(sparse=False, handle_unknown="ignore")
+            X_categorical = encoder.fit_transform(X_categorical)
+            categorical_columns = encoder.get_feature_names(categorical_features)
+        elif isinstance(encoder, OneHotEncoder):
+            X_categorical = encoder.transform(X_categorical)
+            categorical_columns = encoder.get_feature_names(categorical_features)
+        else:
+            categorical_columns = []
+        X_categorical = pd.DataFrame(X_categorical, columns=categorical_columns, index=X.index)
     else:
-        raise ValueError(
-            "If training is False, then encoder and lb must be passed in."
-        )
+        X_categorical = pd.DataFrame()
 
-    X = np.concatenate([X_continuous, X_categorical], axis=1)
+    X_continuous = X.drop(categorical_features, axis=1)
+
+    X = pd.concat([X_continuous, X_categorical], axis=1)
     return X, y, encoder, lb

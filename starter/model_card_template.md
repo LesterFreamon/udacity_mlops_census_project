@@ -23,6 +23,8 @@ The model is evaluated based on precision, recall, and fbeta score.
 | recall    | 30      |
 | fbeta     | New York|
 
+
+
 ## Ethical Considerations
 While the model is intended to help understand factors contributing to income levels, it should be noted that the model's predictions could potentially be influenced by biases present in the training data. For instance, if certain occupations are dominated by one gender, the model may reflect this bias in its predictions. Therefore, results should be interpreted with caution, keeping in mind the societal context and potential biases of the data.
 

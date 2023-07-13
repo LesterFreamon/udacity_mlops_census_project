@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 from .config import CAT_FEATURES, LABEL
 from .ml.data import process_data
-from .ml.model import train_model, inference, compute_model_metrics
+from .ml.model import train_model, inference, compute_model_metrics, compute_metrics_per_category
 
 # Script to train machine learning model.
 
@@ -16,7 +16,7 @@ from .ml.model import train_model, inference, compute_model_metrics
 # Add code to load in the data.
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(current_dir, '..', 'data', 'clean_census.csv')
-print(data_path)
+
 data = pd.read_csv(data_path)
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 train, test = train_test_split(data, test_size=0.20)
@@ -53,6 +53,12 @@ precision, recall, fbeta = compute_model_metrics(y_test, preds_test)
 metrics_dir = os.path.join(current_dir, '..', 'reports')
 with open(os.path.join(metrics_dir, 'metrics.json'), 'w') as file:
     json.dump({'precision': precision, 'recall': recall, 'fbeta': fbeta}, file)
+
+# Compute slices of the metrics
+
+results_df = compute_metrics_per_category(model, test, LABEL, 'education', CAT_FEATURES, encoder, lb)
+
+results_df.to_csv(os.path.join(metrics_dir, 'education_slice.csv'), index=False)
 
 print(f'Precision: {precision}')
 print(f'Recall: {recall}')
