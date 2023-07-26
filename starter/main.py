@@ -1,10 +1,19 @@
+import os
 import pickle
 
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from .src.config import CAT_FEATURES
+try:
+    from src.ml.data import process_data
+    from src.config import CAT_FEATURES
+    from src.clean_data import clean_data
+except ModuleNotFoundError:
+    from .src.ml.data import process_data
+    from .src.config import CAT_FEATURES
+    from .src.clean_data import clean_data
+
 
 app = FastAPI()
 
@@ -12,7 +21,7 @@ app = FastAPI()
 class InputData(BaseModel):
     """Use this data model to parse the input data JSON request body."""
     age: int = Field(..., example=31)
-    workclass: str = Field(..., example="private", alias="work-class")
+    workclass: str = Field(..., example="private")
     education: str = Field(..., example="bachelors")
     marital_status: str = Field(..., example="married_civ_spouse", alias="marital-status")
     occupation: str = Field(..., example="sales")
@@ -31,16 +40,24 @@ class InputData(BaseModel):
 
 
 # Load the trained model and encoder when the application starts
+models_dir = os.path.join(os.path.dirname(__file__), 'model')
+model_path = os.path.join(models_dir, "model.pkl")
+encoder_path = os.path.join(models_dir, "encoder.pkl")
+lb_path = os.path.join(models_dir, "lb.pkl")
 
 try:
-    with open('./model/model.pkl', 'rb') as f:
+    with open(model_path, 'rb') as f:
         model = pickle.load(f)
-    with open('./model/encoder.pkl', 'rb') as f:
+    with open(encoder_path, 'rb') as f:
         encoder = pickle.load(f)
+    with open(lb_path, 'rb') as f:
+        lb = pickle.load(f)
+
 except Exception as e:
     print(f"Error loading model or encoder: {e}")
     model = None
     encoder = None
+    lb = None
 
 
 @app.get("/")
@@ -50,7 +67,6 @@ async def root():
 
 @app.post("/predict")
 async def predict(data: InputData):
-
     if model is None or encoder is None:
         raise HTTPException(status_code=500, detail="Model or encoder not loaded")
 
@@ -58,16 +74,10 @@ async def predict(data: InputData):
     data_dict = data.dict(by_alias=True)
 
     # Transform the data_dict into a DataFrame for the encoder
-    data_df = pd.DataFrame([data_dict])
-
-    # Apply encoder transformations to the appropriate columns
-    data_encoded = encoder.transform(data_df[CAT_FEATURES])
-
-    # Concatenate the encoded columns with the non-encoded columns
-    non_encoded_cols = data_df.columns.difference(CAT_FEATURES)
-    data_encoded = pd.concat([data_df[non_encoded_cols], data_encoded], axis=1)
+    data_df = clean_data(pd.DataFrame([data_dict]))
+    X, _, _, _ = process_data(data_df, CAT_FEATURES, None, False, encoder, lb)
 
     # Model inference
-    prediction = model.predict(data_encoded)
+    prediction = model.predict(X)
 
     return {"prediction": prediction.tolist()}  # jsonify the numpy array before returning

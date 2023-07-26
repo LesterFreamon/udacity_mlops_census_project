@@ -74,12 +74,14 @@ def process_data(
 
     if len(categorical_features) > 0:
         X_categorical = X[categorical_features]
+        print(X_categorical)
         if training is True:
             encoder = OneHotEncoder(sparse=False, handle_unknown="ignore")
             X_categorical = encoder.fit_transform(X_categorical)
             categorical_columns = encoder.get_feature_names(categorical_features)
         elif isinstance(encoder, OneHotEncoder):
             X_categorical = encoder.transform(X_categorical)
+            print(f'printing X_categorical: {X_categorical}')
             categorical_columns = encoder.get_feature_names(categorical_features)
         else:
             categorical_columns = []
