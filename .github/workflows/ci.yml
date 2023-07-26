@@ -24,4 +24,4 @@ jobs:
         mypy --ignore-missing-imports .
     - name: Test with pytest
       run: |
-        pytest ./starter/tests --ignore=./starter/tests/test_main.py --cov=./starter/src
+        pytest ./starter/tests --ignore=./starter/tests/test_sanity.py --cov=./starter/src

@@ -1,9 +1,12 @@
+import requests
+import json
 from fastapi.testclient import TestClient
 
-from main import app
+try:
+    from main import app
+except ModuleNotFoundError:
+    from ..main import app
 
-import json
-import requests
 
 # replace the URL with your application URL
 URL = "http://localhost:5000/api"

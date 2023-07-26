@@ -5,9 +5,15 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from .src.ml.data import process_data
-from .src.config import CAT_FEATURES
-from .src.clean_data import clean_data
+try:
+    from src.ml.data import process_data
+    from src.config import CAT_FEATURES
+    from src.clean_data import clean_data
+except ModuleNotFoundError:
+    from .src.ml.data import process_data
+    from .src.config import CAT_FEATURES
+    from .src.clean_data import clean_data
+
 
 app = FastAPI()
 
